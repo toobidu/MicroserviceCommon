@@ -12,10 +12,10 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     Optional<Category> findByCategoryId(Long categoryId);
 
     // Find by CategoryCode
-    List<Category> findByCategoryCode(String categoryCode);
+    Optional<Category> findByCategoryCode(String categoryCode);
 
     // Find by CategoryName
-    List<Category> findByCategoryName(String categoryName);
+    Optional<Category> findByCategoryName(String categoryName);
 
     // Find by Status
     List<Category> findByStatus(Boolean status);

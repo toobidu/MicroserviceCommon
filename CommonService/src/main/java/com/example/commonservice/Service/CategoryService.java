@@ -20,9 +20,9 @@ public interface CategoryService {
     // Repository
     Optional<Category> findByCategoryId(Long categoryId);
 
-    List<Category> findByCategoryCode(String categoryCode);
+    Optional<Category> findByCategoryCode(String categoryCode);
 
-    List<Category> findByCategoryName(String categoryName);
+    Optional<Category> findByCategoryName(String categoryName);
 
     List<Category> findByStatus(Boolean status);
 

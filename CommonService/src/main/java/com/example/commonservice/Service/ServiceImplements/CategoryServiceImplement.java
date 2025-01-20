@@ -34,9 +34,9 @@ public class CategoryServiceImplement implements CategoryService {
     // Update
     @Override
     @Transactional
-    public Optional<Category> updateCategory(Long id, Category category) {
-        if (categoryRepository.existsById(id)) {
-            category.setCategoryId(id);
+    public Optional<Category> updateCategory(Long categoryId, Category category) {
+        if (categoryRepository.existsById(categoryId)) {
+            category.setCategoryId(categoryId);
             return Optional.of(categoryRepository.save(category));
         }
         return Optional.empty();
@@ -60,12 +60,12 @@ public class CategoryServiceImplement implements CategoryService {
     }
 
     @Override
-    public List<Category> findByCategoryCode(String categoryCode) {
+    public Optional<Category> findByCategoryCode(String categoryCode) {
         return categoryRepository.findByCategoryCode(categoryCode);
     }
 
     @Override
-    public List<Category> findByCategoryName(String categoryName) {
+    public Optional<Category> findByCategoryName(String categoryName) {
         return categoryRepository.findByCategoryName(categoryName);
     }
 

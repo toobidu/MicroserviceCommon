@@ -27,8 +27,7 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<List<CategoryDTO>> getAllCategory() {
         List<Category> categories = categoryService.getAllCategory();
-        return ResponseEntity.ok(convertToDTOList(categories));
-    }
+        return ResponseEntity.ok(DTOConverter.convertToDTOList(categories, CategoryDTO.class));    }
 
     // Create a new category
     @PostMapping
@@ -68,15 +67,16 @@ public class CategoryController {
     // Find by category code
     @GetMapping("/category-code/{categoryCode}")
     public ResponseEntity<List<CategoryDTO>> findByCategoryCode(@PathVariable String categoryCode) {
-        List<Category> categories = categoryService.findByCategoryCode(categoryCode);
-        return ResponseEntity.ok(convertToDTOList(categories));
+        Optional<Category> categories = categoryService.findByCategoryCode(categoryCode);
+        return categories.map(value -> ResponseEntity.ok(List.of(convertToDTO(value)))).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // Find by name
     @GetMapping("/category-name/{categoryName}")
     public ResponseEntity<List<CategoryDTO>> findByCategoryName(@PathVariable String categoryName) {
-        List<Category> categories = categoryService.findByCategoryName(categoryName);
-        return ResponseEntity.ok(convertToDTOList(categories));
+        Optional<Category> category = categoryService.findByCategoryName(categoryName);
+        return category.map(value -> ResponseEntity.ok(List.of(convertToDTO(value)))).orElseGet(() -> ResponseEntity.notFound().build());
+
     }
 
     // Find by status
@@ -112,34 +112,5 @@ public class CategoryController {
     public ResponseEntity<List<CategoryDTO>> findByUpdatedUser(@PathVariable Long updatedUser) {
         List<Category> categories = categoryService.findByUpdatedUser(updatedUser);
         return ResponseEntity.ok(convertToDTOList(categories));
-    }
-
-    // Convert Entity to DTO (Help to control the data which is sent to the client)
-    private CategoryDTO convertToDTO(Category category) {
-        return CategoryDTO.builder()
-                .categoryId(category.getCategoryId())
-                .categoryCode(category.getCategoryCode())
-                .categoryName(category.getCategoryName())
-                .status(category.getStatus())
-                .createdUser(category.getCreatedUser())
-                .updatedUser(category.getUpdatedUser())
-                .build();
-    }
-
-    // Convert DTO to Entity (Help to give and to process data from the client)
-    private Category convertToEntity(CategoryDTO categoryDTO) {
-        return Category.builder()
-                .categoryId(categoryDTO.getCategoryId())
-                .categoryCode(categoryDTO.getCategoryCode())
-                .categoryName(categoryDTO.getCategoryName())
-                .status(categoryDTO.getStatus())
-                .createdUser(categoryDTO.getCreatedUser())
-                .updatedUser(categoryDTO.getUpdatedUser())
-                .build();
-    }
-
-    // Convert List<Entity> to List<DTO> (Help to avoid repeating conversion code in each method)
-    private List<CategoryDTO> convertToDTOList(List<Category> categories) {
-        return categories.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 }
