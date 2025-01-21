@@ -10,8 +10,8 @@ import java.util.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "")
-@ToString(of = {""})
+@EqualsAndHashCode(of = "departmentId")
+@ToString(of = {"departmentId", "departmentCode", "departmentName", "parentDepartmentId"})
 @Builder
 public class Department {
 

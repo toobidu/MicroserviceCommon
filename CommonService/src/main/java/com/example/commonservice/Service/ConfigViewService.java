@@ -31,7 +31,7 @@ public interface ConfigViewService {
     Optional<ConfigView> findByApiPath(String apiPath);
 
     //Find by RoleId
-    List<ConfigView> findByRoleId(String roleId);
+    List<ConfigView> findByRoleId(Long roleId);
 
     //Find by Status
     List<ConfigView> findByStatus(boolean status);

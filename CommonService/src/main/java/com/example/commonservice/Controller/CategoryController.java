@@ -2,18 +2,27 @@ package com.example.commonservice.Controller;
 
 import com.example.commonservice.Model.DTO.CategoryDTO;
 import com.example.commonservice.Model.Entity.Category;
+import com.example.commonservice.Model.Response.ApiResponse;
 import com.example.commonservice.Service.CategoryService;
+import com.example.commonservice.Utility.ConvertDTO;
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/common/front-end/category")
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT})
+@Validated
+@Slf4j
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -23,94 +32,91 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    // Get all
     @GetMapping
-    public ResponseEntity<List<CategoryDTO>> getAllCategory() {
-        List<Category> categories = categoryService.getAllCategory();
-        return ResponseEntity.ok(DTOConverter.convertToDTOList(categories, CategoryDTO.class));    }
-
-    // Create a new category
-    @PostMapping
-    public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryDTO categoryDTO) {
-        Category category = convertToEntity(categoryDTO);
-        Category createdCategory = categoryService.createCategory(category);
-        return ResponseEntity.ok(convertToDTO(createdCategory));
-    }
-
-    // Update a category
-    @PutMapping("/{id}")
-    public ResponseEntity<CategoryDTO> updateCategory(@PathVariable Long id, @RequestBody CategoryDTO categoryDTO) {
-        Category category = convertToEntity(categoryDTO);
-        Optional<Category> updatedCategory = categoryService.updateCategory(id, category);
-        return updatedCategory.map(value -> ResponseEntity.ok(convertToDTO(value))).orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-
-    // Delete a category
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCategory(@PathVariable Long id) {
-        boolean isDeleted = categoryService.deleteCategory(id);
-        if (isDeleted) {
-            return ResponseEntity.ok("Category is deleted successfully!");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error!");
+    public ResponseEntity<ApiResponse<List<CategoryDTO>>> getAllCategory() {
+        try {
+            List<Category> categories = categoryService.getAllCategory();
+            List<CategoryDTO> dtos = ConvertDTO.convertToDTOList(categories, CategoryDTO.class);
+            return ResponseEntity.ok(ApiResponse.success(dtos));
+        } catch (Exception e) {
+            log.error("Error getting all categories: ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.error("Failed to retrieve categories"));
         }
     }
 
-    // Find by id
-    @GetMapping("/category-id/{categoryId}")
-    public ResponseEntity<List<CategoryDTO>> findByCategoryId(@PathVariable Long categoryId) {
-        Optional<Category> category = categoryService.findByCategoryId(categoryId);
-        return category.map(value -> ResponseEntity.ok(List.of(convertToDTO(value)))).orElseGet(() -> ResponseEntity.notFound().build());
+    @PostMapping
+    public ResponseEntity<ApiResponse<CategoryDTO>> createCategory(@Valid @RequestBody CategoryDTO categoryDTO) {
+        try {
+            Category category = ConvertDTO.convertToEntity(categoryDTO, Category.class);
+            Category createdCategory = categoryService.createCategory(category);
+            return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(ConvertDTO.convertToDTO(createdCategory, CategoryDTO.class)));
+        } catch (Exception e) {
+            log.error("Error creating category: ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.error("Failed to create category"));
+        }
     }
 
-    // Find by category code
-    @GetMapping("/category-code/{categoryCode}")
-    public ResponseEntity<List<CategoryDTO>> findByCategoryCode(@PathVariable String categoryCode) {
-        Optional<Category> categories = categoryService.findByCategoryCode(categoryCode);
-        return categories.map(value -> ResponseEntity.ok(List.of(convertToDTO(value)))).orElseGet(() -> ResponseEntity.notFound().build());
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<CategoryDTO>> updateCategory(@PathVariable Long id, @Valid @RequestBody CategoryDTO categoryDTO) {
+        try {
+            Category category = ConvertDTO.convertToEntity(categoryDTO, Category.class);
+            return categoryService.updateCategory(id, category).map(updated -> ResponseEntity.ok(ApiResponse.success(ConvertDTO.convertToDTO(updated, CategoryDTO.class)))).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("Category not found")));
+        } catch (Exception e) {
+            log.error("Error updating category: ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.error("Failed to update category"));
+        }
     }
 
-    // Find by name
-    @GetMapping("/category-name/{categoryName}")
-    public ResponseEntity<List<CategoryDTO>> findByCategoryName(@PathVariable String categoryName) {
-        Optional<Category> category = categoryService.findByCategoryName(categoryName);
-        return category.map(value -> ResponseEntity.ok(List.of(convertToDTO(value)))).orElseGet(() -> ResponseEntity.notFound().build());
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Void>> deleteCategory(@PathVariable Long id) {
+        try {
+            boolean isDeleted = categoryService.deleteCategory(id);
+            if (isDeleted) {
+                return ResponseEntity.ok(ApiResponse.success(null, "Category deleted successfully"));
+            }
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("Category not found"));
+        } catch (Exception e) {
+            log.error("Error deleting category: ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.error("Failed to delete category"));
+        }
     }
 
-    // Find by status
-    @GetMapping("/status/{status}")
-    public ResponseEntity<List<CategoryDTO>> findByStatus(@PathVariable Boolean status) {
-        List<Category> categories = categoryService.findByStatus(status);
-        return ResponseEntity.ok(convertToDTOList(categories));
-    }
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<List<CategoryDTO>>> searchCategories(@RequestParam(required = false) Long categoryId, @RequestParam(required = false) String categoryCode, @RequestParam(required = false) String categoryName, @RequestParam(required = false) Boolean status, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date createdTime, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date updatedTime, @RequestParam(required = false) Long createdUser, @RequestParam(required = false) Long updatedUser) {
 
-    // Find categories by created time
-    @GetMapping("/created-time/{createdTime}")
-    public ResponseEntity<List<CategoryDTO>> findByCreatedTime(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date createdTime) {
-        List<Category> categories = categoryService.findByCreatedTime(createdTime);
-        return ResponseEntity.ok(convertToDTOList(categories));
-    }
+        try {
+            List<Category> categories;
 
-    // Find categories by updated time
-    @GetMapping("/updated-time/{updatedTime}")
-    public ResponseEntity<List<CategoryDTO>> findByUpdatedTime(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date updatedTime) {
-        List<Category> categories = categoryService.findByUpdatedTime(updatedTime);
-        return ResponseEntity.ok(convertToDTOList(categories));
-    }
+            if (categoryId != null) {
+                return categoryService.findByCategoryId(categoryId).map(category -> ResponseEntity.ok(ApiResponse.success(List.of(ConvertDTO.convertToDTO(category, CategoryDTO.class))))).orElse(ResponseEntity.ok(ApiResponse.success(Collections.emptyList())));
+            }
 
-    // Find by created user
-    @GetMapping("/created-user/{createdUser}")
-    public ResponseEntity<List<CategoryDTO>> findByCreatedUser(@PathVariable Long createdUser) {
-        List<Category> categories = categoryService.findByCreatedUser(createdUser);
-        return ResponseEntity.ok(convertToDTOList(categories));
-    }
+            if (categoryCode != null) {
+                return categoryService.findByCategoryCode(categoryCode).map(category -> ResponseEntity.ok(ApiResponse.success(List.of(ConvertDTO.convertToDTO(category, CategoryDTO.class))))).orElse(ResponseEntity.ok(ApiResponse.success(Collections.emptyList())));
+            }
 
-    // Find by updated user
-    @GetMapping("/updated-user/{updatedUser}")
-    public ResponseEntity<List<CategoryDTO>> findByUpdatedUser(@PathVariable Long updatedUser) {
-        List<Category> categories = categoryService.findByUpdatedUser(updatedUser);
-        return ResponseEntity.ok(convertToDTOList(categories));
+            if (categoryName != null) {
+                return categoryService.findByCategoryName(categoryName).map(category -> ResponseEntity.ok(ApiResponse.success(List.of(ConvertDTO.convertToDTO(category, CategoryDTO.class))))).orElse(ResponseEntity.ok(ApiResponse.success(Collections.emptyList())));
+            }
+
+            if (status != null) {
+                categories = categoryService.findByStatus(status);
+            } else if (createdTime != null) {
+                categories = categoryService.findByCreatedTime(createdTime);
+            } else if (updatedTime != null) {
+                categories = categoryService.findByUpdatedTime(updatedTime);
+            } else if (createdUser != null) {
+                categories = categoryService.findByCreatedUser(createdUser);
+            } else if (updatedUser != null) {
+                categories = categoryService.findByUpdatedUser(updatedUser);
+            } else {
+                categories = Collections.emptyList();
+            }
+
+            return ResponseEntity.ok(ApiResponse.success(ConvertDTO.convertToDTOList(categories, CategoryDTO.class)));
+        } catch (Exception e) {
+            log.error("Error searching categories: ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse.error("Failed to search categories"));
+        }
     }
 }

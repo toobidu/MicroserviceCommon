@@ -79,7 +79,7 @@ public class ConfigViewServiceImplement implements ConfigViewService {
     }
 
     @Override
-    public List<ConfigView> findByRoleId(String roleId) {
+    public List<ConfigView> findByRoleId(Long roleId) {
         return configViewRepository.findByRoleId(roleId);
     }
 

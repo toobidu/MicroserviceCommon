@@ -1,13 +1,12 @@
 package com.example.commonservice.Utility;
 
 import org.springframework.beans.BeanUtils;
-
-import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class ConvertDTO {
 
-    // Convert Entity to DTO (Help to control data which is sent to the client)
+    // Convert Entity to DTO
     public static <E, D> D convertToDTO(E entity, Class<D> dtoClass) {
         try {
             D dto = dtoClass.getDeclaredConstructor().newInstance();
@@ -18,7 +17,7 @@ public class ConvertDTO {
         }
     }
 
-    // Convert DTO to Entity (Help to give and process data from the client)
+    // Convert DTO to Entity
     public static <D, E> E convertToEntity(D dto, Class<E> entityClass) {
         try {
             E entity = entityClass.getDeclaredConstructor().newInstance();
@@ -29,7 +28,7 @@ public class ConvertDTO {
         }
     }
 
-    // Convert List<Entity> to List<DTO> (Help to avoi repeating conversion code in each method)
+    // Convert List<Entity> to List<DTO>
     public static <E, D> List<D> convertToDTOList(List<E> entities, Class<D> dtoClass) {
         return entities.stream()
                 .map(entity -> convertToDTO(entity, dtoClass))

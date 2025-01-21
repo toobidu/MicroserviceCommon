@@ -23,7 +23,7 @@ public interface ConfigViewRepository extends JpaRepository<ConfigView, Long> {
     Optional<ConfigView> findByApiPath(String apiPath);
 
     //Find by RoleId
-    List<ConfigView> findByRoleId(String roleId);
+    List<ConfigView> findByRoleId(Long roleId);
 
     // Find by Status
     List<ConfigView> findByStatus(Boolean status);
