@@ -23,11 +23,11 @@ public class ConfigViewServiceImplement implements ConfigViewService {
 
     //Get all
     @Override
-    public List<ConfigView> getAllConfig() {
+    public List<ConfigView> getAllConfigView() {
         return configViewRepository.findAll();
     }
 
-    //Create new
+    //Create
     @Override
     @Transactional
     public ConfigView createConfigView(ConfigView configView) {
@@ -56,56 +56,9 @@ public class ConfigViewServiceImplement implements ConfigViewService {
         return false;
     }
 
-    //Repository method
-
+    //Search
     @Override
-    public Optional<ConfigView> findById(Long configViewId) {
-        return configViewRepository.findByConfigViewId(configViewId);
+    public List<ConfigView> searchConfigView(Long configViewId, String viewName, String viewPath, String apiPath, Long roleId, Boolean status, Date createdTime, Date updatedTime, Long createdUser, Long updatedUser) {
+        return configViewRepository.searchConfigViewsBy(configViewId, viewName, viewPath, apiPath, roleId, status, createdTime, updatedTime, createdUser, updatedUser);
     }
-
-    @Override
-    public Optional<ConfigView> findByViewName(String viewName) {
-        return configViewRepository.findByViewName(viewName);
-    }
-
-    @Override
-    public Optional<ConfigView> findByViewPath(String viewPath) {
-        return configViewRepository.findByViewPath(viewPath);
-    }
-
-    @Override
-    public Optional<ConfigView> findByApiPath(String apiPath) {
-        return configViewRepository.findByApiPath(apiPath);
-    }
-
-    @Override
-    public List<ConfigView> findByRoleId(Long roleId) {
-        return configViewRepository.findByRoleId(roleId);
-    }
-
-    @Override
-    public List<ConfigView> findByStatus(boolean status) {
-        return configViewRepository.findByStatus(status);
-    }
-
-    @Override
-    public List<ConfigView> findByCreatedTime(Date createdTime) {
-        return configViewRepository.findByCreatedTime(createdTime);
-    }
-
-    @Override
-    public List<ConfigView> findByUpdatedTime(Date updatedTime) {
-        return configViewRepository.findByUpdatedTime(updatedTime);
-    }
-
-    @Override
-    public List<ConfigView> findByCreatedUser(Long createdUser) {
-        return configViewRepository.findByCreatedUser(createdUser);
-    }
-
-    @Override
-    public List<ConfigView> findByUpdatedUser(Long updatedUser) {
-        return configViewRepository.findByUpdatedUser(updatedUser);
-    }
-
 }

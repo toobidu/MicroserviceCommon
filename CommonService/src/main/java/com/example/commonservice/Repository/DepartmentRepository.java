@@ -1,6 +1,6 @@
 package com.example.commonservice.Repository;
 
-import com.example.commonservice.Model.Entity.Category;
+import com.example.commonservice.Model.Entity.Department;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,22 +10,23 @@ import java.util.Date;
 import java.util.List;
 
 @Repository
-public interface CategoryRepository extends JpaRepository<Category, Long> {
+public interface DepartmentRepository extends JpaRepository<Department, Long> {
 
-    // Custom query method for searching categories by multiple criteria
-    @Query("SELECT c FROM Category c WHERE "
-            + "(:categoryId IS NULL OR c.categoryId = :categoryId) AND "
-            + "(:categoryCode IS NULL OR c.categoryCode = :categoryCode) AND "
-            + "(:categoryName IS NULL OR c.categoryName = :categoryName) AND "
+    @Query("SELECT c FROM Department c WHERE "
+            + "(:departmentId IS NULL OR c.departmentId = :departmentId) AND "
+            + "(:departmentCode IS NULL OR c.departmentCode = :departmentCode) AND "
+            + "(:departmentName IS NULL OR c.departmentName = :departmentName) AND "
+            + "(:parentDepartmentId IS NULL OR c.parentDepartmentId = :parentDepartmentId) AND"
             + "(:status IS NULL OR c.status = :status) AND "
             + "(:createdTime IS NULL OR c.createdTime = :createdTime) AND "
             + "(:updatedTime IS NULL OR c.updatedTime = :updatedTime) AND "
             + "(:createdUser IS NULL OR c.createdUser = :createdUser) AND "
             + "(:updatedUser IS NULL OR c.updatedUser = :updatedUser)")
-    List<Category> searchCategoriesBy(
-            @Param("categoryId") Long categoryId,
-            @Param("categoryCode") String categoryCode,
-            @Param("categoryName") String categoryName,
+    List<Department> searchDepartmentsBy(
+            @Param("departmentId") Long departmentId,
+            @Param("departmentCode") String departmentCode,
+            @Param("departmentName") String departmentName,
+            @Param("parentDepartmentId") Long parentDepartmentId,
             @Param("status") Boolean status,
             @Param("createdTime") Date createdTime,
             @Param("updatedTime") Date updatedTime,

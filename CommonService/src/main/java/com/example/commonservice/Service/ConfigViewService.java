@@ -1,13 +1,15 @@
 package com.example.commonservice.Service;
 
-
 import com.example.commonservice.Model.Entity.ConfigView;
 
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
 public interface ConfigViewService {
 
     //Get all
-    List<ConfigView> getAllConfig();
+    List<ConfigView> getAllConfigView();
 
     //Create new
     ConfigView createConfigView(ConfigView configView);
@@ -18,34 +20,6 @@ public interface ConfigViewService {
     //Delete
     boolean deleteConfigView(Long configViewId);
 
-    //Find by ID
-    Optional<ConfigView> findById(Long configViewId);
-
-    //Find by ViewName
-    Optional<ConfigView> findByViewName(String viewName);
-
-    //Find by ViewPath
-    Optional<ConfigView> findByViewPath(String viewPath);
-
-    //Find by ApiPath
-    Optional<ConfigView> findByApiPath(String apiPath);
-
-    //Find by RoleId
-    List<ConfigView> findByRoleId(Long roleId);
-
-    //Find by Status
-    List<ConfigView> findByStatus(boolean status);
-
-    //Find by CreatedTime
-    List<ConfigView> findByCreatedTime(Date createdTime);
-
-    //Find by UpdatedTime
-    List<ConfigView> findByUpdatedTime(Date updatedTime);
-
-    //Find by CreatedUser
-    List<ConfigView> findByCreatedUser(Long createdUser);
-
-    //Find by UpdatedUser
-    List<ConfigView> findByUpdatedUser(Long updatedUser);
-
+    //Search
+    List<ConfigView> searchConfigView(Long configViewId, String viewName, String viewPath, String apiPath, Long roleId, Boolean status, Date createdTime, Date updatedTime, Long createdUser, Long updatedUser);
 }

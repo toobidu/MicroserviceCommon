@@ -2,35 +2,25 @@ package com.example.commonservice.Service;
 
 import com.example.commonservice.Model.Entity.Category;
 
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
 public interface CategoryService {
 
-    // Get all
+    // Get all categories
     List<Category> getAllCategory();
 
-    // Create new
+    // Create a new category
     Category createCategory(Category category);
 
-    // Update
+    // Update a category
     Optional<Category> updateCategory(Long categoryId, Category category);
 
-    // Delete
+    // Delete a category
     boolean deleteCategory(Long categoryId);
 
-    // Repository
-    Optional<Category> findByCategoryId(Long categoryId);
+    // Search categories by multiple criteria
+    List<Category> searchCategories(Long categoryId, String categoryCode, String categoryName, Boolean status, Date createdTime, Date updatedTime, Long createdUser, Long updatedUser);
 
-    Optional<Category> findByCategoryCode(String categoryCode);
-
-    Optional<Category> findByCategoryName(String categoryName);
-
-    List<Category> findByStatus(Boolean status);
-
-    List<Category> findByCreatedTime(Date createdTime);
-
-    List<Category> findByUpdatedTime(Date updatedTime);
-
-    List<Category> findByCreatedUser(Long createdUser);
-
-    List<Category> findByUpdatedUser(Long updatedUser);
 }

@@ -1,42 +1,39 @@
 package com.example.commonservice.Repository;
 
+
 import com.example.commonservice.Model.Entity.ConfigView;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
+
 @Repository
 public interface ConfigViewRepository extends JpaRepository<ConfigView, Long> {
 
-    //Find by ConfigViewId
-    Optional<ConfigView> findByConfigViewId(Long configViewId);
+    @Query("SELECT c FROM ConfigView c WHERE "
+            + "(:configViewId IS NULL OR c.configViewId = :configViewId) AND "
+            + "(:viewName IS NULL OR c.viewName = :viewName) AND "
+            + "(:viewPath IS NULL OR c.viewPath = :viewPath) AND "
+            + "(:apiPath IS NULL OR c.apiPath = :apiPath) AND"
+            + "(:roleId IS NULL OR c.roleId= :roleId) AND "
+            + "(:status IS NULL OR c.status = :status) AND "
+            + "(:createdTime IS NULL OR c.createdTime = :createdTime) AND "
+            + "(:updatedTime IS NULL OR c.updatedTime = :updatedTime) AND "
+            + "(:createdUser IS NULL OR c.createdUser = :createdUser) AND "
+            + "(:updatedUser IS NULL OR c.updatedUser = :updatedUser)")
+    List<ConfigView> searchConfigViewsBy(
+            @Param("configViewId") Long configViewId,
+            @Param("viewName") String viewName,
+            @Param("viewPath") String viewPath,
+            @Param("apiPath") String apiPath,
+            @Param("roleId") Long roleId,
+            @Param("status") Boolean status,
+            @Param("createdTime") Date createdTime,
+            @Param("updatedTime") Date updatedTime,
+            @Param("createdUser") Long createdUser,
+            @Param("updatedUser") Long updatedUser);
 
-    //Find by ViewName
-    Optional<ConfigView> findByViewName(String viewName);
-
-    //Find by ViewPath
-    Optional<ConfigView> findByViewPath(String ViewPath);
-
-    //Find by ApiPath
-    Optional<ConfigView> findByApiPath(String apiPath);
-
-    //Find by RoleId
-    List<ConfigView> findByRoleId(Long roleId);
-
-    // Find by Status
-    List<ConfigView> findByStatus(Boolean status);
-
-    // Find by CreatedTime
-    List<ConfigView> findByCreatedTime(Date createdTime);
-
-    // Find by UpdatedTime
-    List<ConfigView> findByUpdatedTime(Date updatedTime);
-
-    // Find by CreatedUser
-    List<ConfigView> findByCreatedUser(Long createdUser);
-
-    // Find by UpdatedUser
-    List<ConfigView> findByUpdatedUser(Long updatedUser);
 }

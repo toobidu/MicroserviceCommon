@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+
 @Service
 public class CategoryServiceImplement implements CategoryService {
 
@@ -18,20 +19,20 @@ public class CategoryServiceImplement implements CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    // Get all
+    // Get all categories
     @Override
     public List<Category> getAllCategory() {
         return categoryRepository.findAll();
     }
 
-    // Create new
+    // Create a new category
     @Override
     @Transactional
     public Category createCategory(Category category) {
         return categoryRepository.save(category);
     }
 
-    // Update
+    // Update a category
     @Override
     @Transactional
     public Optional<Category> updateCategory(Long categoryId, Category category) {
@@ -42,7 +43,7 @@ public class CategoryServiceImplement implements CategoryService {
         return Optional.empty();
     }
 
-    // Delete
+    // Delete a category
     @Override
     @Transactional
     public boolean deleteCategory(Long categoryId) {
@@ -53,44 +54,10 @@ public class CategoryServiceImplement implements CategoryService {
         return false;
     }
 
-    // Repository methods
+    // Search categories by multiple criteria
     @Override
-    public Optional<Category> findByCategoryId(Long categoryId) {
-        return categoryRepository.findByCategoryId(categoryId);
-    }
-
-    @Override
-    public Optional<Category> findByCategoryCode(String categoryCode) {
-        return categoryRepository.findByCategoryCode(categoryCode);
-    }
-
-    @Override
-    public Optional<Category> findByCategoryName(String categoryName) {
-        return categoryRepository.findByCategoryName(categoryName);
-    }
-
-    @Override
-    public List<Category> findByStatus(Boolean status) {
-        return categoryRepository.findByStatus(status);
-    }
-
-    @Override
-    public List<Category> findByCreatedTime(Date createdTime) {
-        return categoryRepository.findByCreatedTime(createdTime);
-    }
-
-    @Override
-    public List<Category> findByUpdatedTime(Date updatedTime) {
-        return categoryRepository.findByUpdatedTime(updatedTime);
-    }
-
-    @Override
-    public List<Category> findByCreatedUser(Long createdUser) {
-        return categoryRepository.findByCreatedUser(createdUser);
-    }
-
-    @Override
-    public List<Category> findByUpdatedUser(Long updatedUser) {
-        return categoryRepository.findByUpdatedUser(updatedUser);
+    public List<Category> searchCategories(Long categoryId, String categoryCode, String categoryName, Boolean status, Date createdTime, Date updatedTime, Long createdUser, Long updatedUser) {
+        // Implement the search logic based on the criteria
+        return categoryRepository.searchCategoriesBy(categoryId, categoryCode, categoryName, status, createdTime, updatedTime, createdUser, updatedUser);
     }
 }
