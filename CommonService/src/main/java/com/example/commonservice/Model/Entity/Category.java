@@ -16,9 +16,18 @@ import java.util.*;
 public class Category {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "category_sequence")
+    @SequenceGenerator(
+            name = "category_sequence",
+            sequenceName = "CATEGORY_SEQ",
+            allocationSize = 1
+    )
     @Column(name = "CATEGORY_ID")
     private Long categoryId;
+
+    @Version
+    @Column(name = "VERSION")
+    private Long version;
 
     @Column(name = "CATEGORY_CODE", length = 100, nullable = false)
     private String categoryCode;
@@ -47,12 +56,14 @@ public class Category {
 
     //Constructor
     public Category(
+            Long categoryId,
             String categoryCode,
             String categoryName,
             Boolean status,
             Long createdUser,
             Long updatedUser
     ) {
+        this.categoryId = categoryId;
         this.categoryCode = categoryCode;
         this.categoryName = categoryName;
         this.status = status;

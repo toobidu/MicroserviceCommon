@@ -21,5 +21,5 @@ public interface ConfigViewService {
     boolean deleteConfigView(Long configViewId);
 
     //Search
-    List<ConfigView> searchConfigView(Long configViewId, String viewName, String viewPath, String apiPath, Long roleId, Boolean status, Date createdTime, Date updatedTime, Long createdUser, Long updatedUser);
+    List<ConfigView> searchConfigView(Long configViewId, String viewName, String viewPath, String apiPath, String roleId, Boolean status, Date createdTime, Date updatedTime, Long createdUser, Long updatedUser);
 }

@@ -3,7 +3,7 @@ package com.example.commonservice.Model.Entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.*;
+import java.util.Date;
 
 
 @Entity
@@ -17,9 +17,18 @@ import java.util.*;
 public class ConfigView {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "config_view_sequence")
+    @SequenceGenerator(
+            name = "config_view_sequence",
+            sequenceName = "CONFIG_VIEW_SEQ",
+            allocationSize = 1
+    )
     @Column(name = "ID")
     private Long configViewId;
+
+    @Version
+    @Column(name = "VERSION")
+    private Long version;
 
     @Column(name = "VIEW_NAME", length = 500, nullable = false)
     private String viewName;
@@ -31,7 +40,7 @@ public class ConfigView {
     private String apiPath;
 
     @Column(name = "ROLE_ID", length = 100, nullable = false)
-    private Long roleId;
+    private String roleId;
 
     @Column(name = "STATUS")
     private Boolean status;
@@ -56,7 +65,7 @@ public class ConfigView {
             String viewName,
             String viewPath,
             String apiPath,
-            Long roleId,
+            String roleId,
             Boolean status,
             Long createdUser,
             Long updatedUser) {
