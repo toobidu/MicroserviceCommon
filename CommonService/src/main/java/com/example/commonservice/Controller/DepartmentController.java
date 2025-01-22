@@ -42,7 +42,7 @@ public class DepartmentController {
     @PutMapping("/{id}")
     public ResponseEntity<Department> updateDepartment(@PathVariable Long id, @RequestBody Department department) {
         Optional<Department> updatedDepartment = departmentService.updateDepartment(department, id);
-        return updatedDepartment.map(ResponseEntity::ok).orElseGet(()-> ResponseEntity.notFound().build());
+        return updatedDepartment.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     //Delete
@@ -51,7 +51,7 @@ public class DepartmentController {
         boolean deleted = departmentService.deleteDepartment(id);
         if (deleted) {
             return ResponseEntity.ok("Department deleted successfully.");
-        }else {
+        } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error!");
         }
     }

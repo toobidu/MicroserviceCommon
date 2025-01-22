@@ -16,9 +16,18 @@ import java.util.*;
 public class Department {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "department_sequence")
+    @SequenceGenerator(
+            name = "department_sequence",
+            sequenceName = "DEPARTMENT_SEQ",
+            allocationSize = 1
+    )
     @Column(name = "DEPARTMENT_ID")
     private Long departmentId;
+
+    @Version
+    @Column(name = "VERSION")
+    private Long version;
 
     @Column(name = "DEPARTMENT_CODE", length = 100, nullable = false)
     private String departmentCode;
