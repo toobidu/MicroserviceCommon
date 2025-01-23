@@ -96,4 +96,5 @@ public class DepartmentServiceImplement implements DepartmentService {
     public List<Department> searchDepartments(Long departmentId, String departmentCode, String departmentName, Long parentDepartmentId, Boolean status, Date createdTime, Date updatedTime, Long createdUser, Long updatedUser) {
         return departmentRepository.searchDepartmentsBy(departmentId, departmentCode, departmentName, parentDepartmentId, status, createdTime, updatedTime, createdUser, updatedUser);
     }
+
 }

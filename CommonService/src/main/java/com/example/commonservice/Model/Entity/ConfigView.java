@@ -47,10 +47,12 @@ public class ConfigView {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATED_TIME")
+    @Setter(AccessLevel.NONE)
     private Date createdTime;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "UPDATED_TIME")
+    @Setter(AccessLevel.NONE)
     private Date updatedTime;
 
     @Column(name = "CREATED_USER")
