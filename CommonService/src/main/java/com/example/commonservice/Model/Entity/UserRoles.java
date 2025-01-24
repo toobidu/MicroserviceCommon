@@ -18,10 +18,11 @@ public class UserRoles {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_ROLES_SEQ")
     @SequenceGenerator(name = "USER_ROLES_SEQ", sequenceName = "USER_ROLES_SEQ", allocationSize = 1)
     @Column(name = "ID")
-    private Long userRoleId;
+    private Long userRolesId;
 
-    @Column(name = "USER_ID")
-    private Long userId;
+    @OneToOne
+    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", insertable = false, updatable = false)
+    private Users users;
 
     @Column(name = "ROLE_ID")
     private Long roleId;
@@ -43,11 +44,24 @@ public class UserRoles {
     private Long updatedUser;
 
     //Constructor
-    public UserRoles(Long userRoleId, Long userId, Long roleId, Long createdUser, Long updatedUser) {
-        this.userRoleId = userRoleId;
+    public UserRoles(Long userRolesId, Long userId, Long roleId, Long createdUser, Long updatedUser) {
+        this.userRolesId = userRolesId;
         this.userId = userId;
         this.roleId = roleId;
         this.createdUser = createdUser;
         this.updatedUser = createdUser;
+        this.createdTime = new Date();
+        this.updatedTime = new Date();
+    }
+
+    @PrePersist
+    protected void toCreate() {
+        this.createdTime = new Date();
+        this.updatedTime = new Date();
+    }
+
+    @PreUpdate
+    protected void toUpdate() {
+        this.updatedTime = new Date();
     }
 }

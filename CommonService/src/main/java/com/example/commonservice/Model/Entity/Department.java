@@ -25,10 +25,6 @@ public class Department {
     @Column(name = "DEPARTMENT_ID")
     private Long departmentId;
 
-    @Version
-    @Column(name = "VERSION")
-    private Long version;
-
     @Column(name = "DEPARTMENT_CODE", length = 100, nullable = false)
     private String departmentCode;
 

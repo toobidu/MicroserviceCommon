@@ -25,10 +25,6 @@ public class Item {
     @Column(name = "ITEM_ID")
     private Long itemId;
 
-    @Version
-    @Column(name = "VERSION")
-    private Long version;
-
     @Column(name = "ITEM_NAME", length = 500, nullable = false)
     private String itemName;
 

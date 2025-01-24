@@ -4,6 +4,7 @@ import com.example.commonservice.Model.Entity.SendMail;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface SendMailService {
 
@@ -14,7 +15,7 @@ public interface SendMailService {
     SendMail createSendMail(SendMail sendMail);
 
     //Update
-    SendMail updateSendMail(Long sendMailId, SendMail sendMail);
+    Optional<SendMail> updateSendMail(Long sendMailId, SendMail sendMail);
 
     //Delete
     boolean deleteSendMail(Long sendMailId);

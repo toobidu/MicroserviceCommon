@@ -26,10 +26,6 @@ public class ConfigView {
     @Column(name = "ID")
     private Long configViewId;
 
-    @Version
-    @Column(name = "VERSION")
-    private Long version;
-
     @Column(name = "VIEW_NAME", length = 500, nullable = false)
     private String viewName;
 

@@ -25,10 +25,6 @@ public class Category {
     @Column(name = "CATEGORY_ID")
     private Long categoryId;
 
-    @Version
-    @Column(name = "VERSION")
-    private Long version;
-
     @Column(name = "CATEGORY_CODE", length = 100, nullable = false)
     private String categoryCode;
 

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -50,19 +51,18 @@ public class SendMailServiceImplement implements SendMailService {
     //Update mail
     @Override
     @Transactional(readOnly = false)
-    public SendMail updateSendMail(Long sendMailId, SendMail sendMail) {
+    public Optional<SendMail> updateSendMail(Long sendMailId, SendMail sendMail) {
         try {
             return sendMailRepository.findById(sendMailId)
                     .map(existingSendMail -> {
                         // Update each field instead of saving directly
-                       existingSendMail.setContent(sendMail.getContent());
-                       existingSendMail.setMailTo(sendMail.getMailTo());
-                       existingSendMail.setStatus(sendMail.getStatus());
-                       existingSendMail.setCreatedUser(sendMail.getCreatedUser());
-                       existingSendMail.setUpdatedUser(sendMail.getUpdatedUser());
+                        existingSendMail.setContent(sendMail.getContent());
+                        existingSendMail.setMailTo(sendMail.getMailTo());
+                        existingSendMail.setStatus(sendMail.getStatus());
+                        existingSendMail.setCreatedUser(sendMail.getCreatedUser());
+                        existingSendMail.setUpdatedUser(sendMail.getUpdatedUser());
                         return sendMailRepository.save(existingSendMail);
-                    })
-                    .orElseThrow(() -> new RuntimeException("Send mail not found with id " + sendMailId));
+                    });
         } catch (DataIntegrityViolationException e) {
             throw new RuntimeException("Send mail code already exists", e);
         } catch (Exception e) {
