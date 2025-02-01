@@ -1,9 +1,14 @@
 package com.example.commonservice.Model.Entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -11,45 +16,43 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "configViewId")
-@ToString(of = {"configViewId", "viewName", "viewPath", "apiPath", "roleId"})
 @Builder
 public class ConfigView {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "config_view_sequence")
-    @SequenceGenerator(
-            name = "config_view_sequence",
-            sequenceName = "CONFIG_VIEW_SEQ",
-            allocationSize = 1
-    )
+    @SequenceGenerator(name = "config_view_sequence", sequenceName = "CONFIG_VIEW_SEQ", allocationSize = 1)
     @Column(name = "ID")
     private Long configViewId;
 
+    @NotBlank
+    @Size(max = 500)
     @Column(name = "VIEW_NAME", length = 500, nullable = false)
     private String viewName;
 
+    @NotBlank
+    @Size(max = 500)
     @Column(name = "VIEW_PATH", length = 500, nullable = false)
     private String viewPath;
 
+    @NotBlank
+    @Size(max = 500)
     @Column(name = "API_PATH", length = 500, nullable = false)
     private String apiPath;
 
+    @NotBlank
+    @Size(max = 100)
     @Column(name = "ROLE_ID", length = 100, nullable = false)
     private String roleId;
 
     @Column(name = "STATUS")
     private Boolean status;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATED_TIME")
-    @Setter(AccessLevel.NONE)
-    private Date createdTime;
+    private LocalDateTime createdTime;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "UPDATED_TIME")
-    @Setter(AccessLevel.NONE)
-    private Date updatedTime;
+    private LocalDateTime updatedTime;
 
     @Column(name = "CREATED_USER")
     private Long createdUser;
@@ -57,36 +60,14 @@ public class ConfigView {
     @Column(name = "UPDATED_USER")
     private Long updatedUser;
 
-    //Constructor
-    public ConfigView(
-            Long configViewId,
-            String viewName,
-            String viewPath,
-            String apiPath,
-            String roleId,
-            Boolean status,
-            Long createdUser,
-            Long updatedUser) {
-        this.configViewId = configViewId;
-        this.viewName = viewName;
-        this.viewPath = viewPath;
-        this.apiPath = apiPath;
-        this.roleId = roleId;
-        this.status = status;
-        this.createdTime = new Date();
-        this.updatedTime = new Date();
-        this.createdUser = createdUser;
-        this.updatedUser = updatedUser;
-    }
-
     @PrePersist
-    protected void toCreate() {
-        this.createdTime = new Date();
-        this.updatedTime = new Date();
+    protected void onCreate() {
+        createdTime = LocalDateTime.now();
+        updatedTime = LocalDateTime.now();
     }
 
     @PreUpdate
-    protected void toUpdate() {
-        this.updatedTime = new Date();
+    protected void onUpdate() {
+        updatedTime = LocalDateTime.now();
     }
 }

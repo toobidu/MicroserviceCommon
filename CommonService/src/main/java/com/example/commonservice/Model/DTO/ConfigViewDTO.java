@@ -1,13 +1,12 @@
 package com.example.commonservice.Model.DTO;
 
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ConfigViewDTO {
     private Long configViewId;
     private String configViewName;
@@ -15,8 +14,8 @@ public class ConfigViewDTO {
     private String apiPath;
     private Long roleId;
     private Boolean status;
-    private Date createTime;
-    private Date updateTime;
+    private LocalDateTime createdTime;
+    private LocalDateTime updatedTime;
     private Long createdUser;
     private Long updatedUser;
 }

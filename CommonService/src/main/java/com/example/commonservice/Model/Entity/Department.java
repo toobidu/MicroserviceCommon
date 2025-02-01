@@ -1,51 +1,51 @@
 package com.example.commonservice.Model.Entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "DEPARTMENT")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "departmentId")
-@ToString(of = {"departmentId", "departmentCode", "departmentName", "parentDepartmentId"})
 @Builder
 public class Department {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "department_sequence")
-    @SequenceGenerator(
-            name = "department_sequence",
-            sequenceName = "DEPARTMENT_SEQ",
-            allocationSize = 1
-    )
+    @SequenceGenerator(name = "department_sequence", sequenceName = "DEPARTMENT_SEQ", allocationSize = 1)
     @Column(name = "DEPARTMENT_ID")
     private Long departmentId;
 
+    @NotBlank
+    @Size(max = 100)
     @Column(name = "DEPARTMENT_CODE", length = 100, nullable = false)
     private String departmentCode;
 
+    @NotBlank
+    @Size(max = 500)
     @Column(name = "DEPARTMENT_NAME", length = 500, nullable = false)
     private String departmentName;
 
+    @NotBlank
     @Column(name = "PARENT_DEPARTMENT_ID")
     private Long parentDepartmentId;
 
     @Column(name = "STATUS")
     private Boolean status;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATED_TIME")
-    @Setter(AccessLevel.NONE)
-    private Date createdTime;
+    private LocalDateTime createdTime;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "UPDATED_TIME")
-    @Setter(AccessLevel.NONE)
-    private Date updatedTime;
+    private LocalDateTime updatedTime;
 
     @Column(name = "CREATED_USER")
     private Long createdUser;
@@ -53,36 +53,14 @@ public class Department {
     @Column(name = "UPDATED_USER")
     private Long updatedUser;
 
-    //Constructor
-
-    public Department(
-            Long departmentId,
-            String departmentCode,
-            String departmentName,
-            Long parentDepartmentId,
-            Boolean status,
-            Long createdUser,
-            Long updatedUser
-    ) {
-        this.departmentId = departmentId;
-        this.departmentCode = departmentCode;
-        this.departmentName = departmentName;
-        this.parentDepartmentId = parentDepartmentId;
-        this.status = status;
-        this.createdTime = new Date();
-        this.updatedTime = new Date();
-        this.createdUser = createdUser;
-        this.updatedUser = updatedUser;
-    }
-
     @PrePersist
-    protected void toCreate() {
-        this.createdTime = new Date();
-        this.updatedTime = new Date();
+    protected void onCreate() {
+        createdTime = LocalDateTime.now();
+        updatedTime = LocalDateTime.now();
     }
 
     @PreUpdate
-    protected void toUpdate() {
-        this.updatedTime = new Date();
+    protected void onUpdate() {
+        updatedTime = LocalDateTime.now();
     }
 }
