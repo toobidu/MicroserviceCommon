@@ -10,13 +10,12 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "fileId")
-@ToString(of = {"fileId", "fileName", "filePath", "businessCode", "businessId"})
 @Builder
 public class Files {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "files_sequence")
+    @SequenceGenerator(name = "files_sequence", sequenceName = "FILES_SEQ", allocationSize = 1)
     @Column(name = "FILE_ID")
     private Long fileId;
 
