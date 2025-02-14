@@ -1,9 +1,14 @@
 package com.example.commonservice.Model.Entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import java.util.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "ITEM")
@@ -11,17 +16,11 @@ import java.util.*;
 @NoArgsConstructor
 @Builder
 @Data
-@EqualsAndHashCode(of = "itemId")
-@ToString(of = {"itemId", "itemCode", "itemName", "itemValue", "parentItemId", "categoryId"})
 public class Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "item_sequence")
-    @SequenceGenerator(
-            name = "item_sequence",
-            sequenceName = "ITEM_SEQ",
-            allocationSize = 1
-    )
+    @SequenceGenerator(name = "item_sequence", sequenceName = "ITEM_SEQ", allocationSize = 1)
     @Column(name = "ITEM_ID")
     private Long itemId;
 
@@ -44,15 +43,13 @@ public class Item {
     @Column(name = "STATUS")
     private Boolean status;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATED_TIME")
-    @Setter(AccessLevel.NONE)
-    private Date createdTime;
+    @CreationTimestamp
+    private LocalDateTime createdTime;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "UPDATED_TIME")
-    @Setter(AccessLevel.NONE)
-    private Date updatedTime;
+    @UpdateTimestamp
+    private LocalDateTime updatedTime;
 
     @Column(name = "CREATED_USER")
     private Long createdUser;
@@ -61,17 +58,7 @@ public class Item {
     private Long updatedUser;
 
     //Constructor
-    public Item(
-            Long itemId,
-            String itemName,
-            String itemCode,
-            String itemValue,
-            Long parentItemId,
-            Category categoryId,
-            Boolean status,
-            Long createdUser,
-            Long updatedUser
-    ) {
+    public Item(Long itemId, String itemName, String itemCode, String itemValue, Long parentItemId, Category categoryId, Boolean status, Long createdUser, Long updatedUser) {
         this.itemId = itemId;
         this.itemName = itemName;
         this.itemCode = itemCode;
@@ -81,18 +68,5 @@ public class Item {
         this.status = status;
         this.createdUser = createdUser;
         this.updatedUser = updatedUser;
-        this.createdTime = new Date();  // Set createdTime to current time
-        this.updatedTime = new Date();  // Set updatedTime to current time
-    }
-
-    @PrePersist
-    protected void toCreate() {
-        this.createdTime = new Date();
-        this.updatedTime = new Date();
-    }
-
-    @PreUpdate
-    protected void toUpdate() {
-        this.updatedTime = new Date();
     }
 }

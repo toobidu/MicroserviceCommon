@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -33,8 +33,8 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
             @Param("parentItemId") Long parentItemId,
             @Param("categoryId") Long categoryId,
             @Param("status") Boolean status,
-            @Param("createdTime") Date createdTime,
-            @Param("updatedTime") Date updatedTime,
+            @Param("createdTime") LocalDateTime createdTime,
+            @Param("updatedTime") LocalDateTime updatedTime,
             @Param("createdUser") Long createdUser,
             @Param("updatedUser") Long updatedUser);
 }

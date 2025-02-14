@@ -1,24 +1,32 @@
 package com.example.commonservice.Model.DTO;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.Size;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ItemDTO {
-    private Long itemId;
-    private String itemName;
-    private String itemCode;
-    private String itemValue;
-    private Long parentItemId;
-    private Long categoryId;
-    private Boolean status;
-    private Long createdUser;
-    private Long updatedUser;
-    private String createdTime;
-    private String updatedTime;
+    Long itemId;
+
+    @Size(max = 500)
+    String itemName;
+
+    @Size(max = 100)
+    String itemCode;
+
+    @Size(max = 500)
+    String itemValue;
+    Long parentItemId;
+    Long categoryId;
+    Boolean status;
+    LocalDateTime createdTime;
+    LocalDateTime updatedTime;
+    Long createdUser;
+    Long updatedUser;
 }

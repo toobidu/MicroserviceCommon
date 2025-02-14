@@ -1,9 +1,14 @@
 package com.example.commonservice.Model.Entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import java.util.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "SEND_MAIL")
@@ -11,23 +16,13 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@EqualsAndHashCode(of = "sendMailId")
-@ToString(of = {"sendMailId", "content", "mailTo", "sendMailValue", "parentSendMailId", "categorySendMailId"})
 public class SendMail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "send_mail_sequence")
-    @SequenceGenerator(
-            name = "send_mail_sequence",
-            sequenceName = "SEND_MAIL_SEQ",
-            allocationSize = 1
-    )
+    @SequenceGenerator(name = "send_mail_sequence", sequenceName = "SEND_MAIL_SEQ", allocationSize = 1)
     @Column(name = "ID")
     private Long sendMailId;
-
-    @Version
-    @Column(name = "VERSION")
-    private Long version;
 
     @Column(name = "CONTENT")
     private String content;
@@ -38,15 +33,13 @@ public class SendMail {
     @Column(name = "STATUS")
     private Boolean status;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATED_TIME")
-    @Setter(AccessLevel.NONE)
-    private Date createdTime;
+    @CreationTimestamp
+    private LocalDateTime createdTime;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "UPDATED_TIME")
-    @Setter(AccessLevel.NONE)
-    private Date updatedTime;
+    @UpdateTimestamp
+    private LocalDateTime updatedTime;
 
     @Column(name = "CREATED_USER")
     private Long createdUser;
@@ -55,32 +48,12 @@ public class SendMail {
     private Long updatedUser;
 
     //Constructor
-    public SendMail(
-            Long sendMailId,
-            String content,
-            String mailTo,
-            Boolean status,
-            Long createdUser,
-            Long updatedUser
-    ) {
+    public SendMail(Long sendMailId, String content, String mailTo, Boolean status, Long createdUser, Long updatedUser) {
         this.sendMailId = sendMailId;
         this.content = content;
         this.mailTo = mailTo;
         this.status = status;
         this.createdUser = createdUser;
         this.updatedUser = updatedUser;
-        this.createdTime = new Date();  // Set createdTime to current time
-        this.updatedTime = new Date();  // Set updatedTime to current time
-    }
-
-    @PrePersist
-    protected void toCreate() {
-        this.createdTime = new Date();
-        this.updatedTime = new Date();
-    }
-
-    @PreUpdate
-    protected void toUpdate() {
-        this.updatedTime = new Date();
     }
 }

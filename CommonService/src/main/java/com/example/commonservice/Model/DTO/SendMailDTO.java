@@ -1,24 +1,26 @@
 package com.example.commonservice.Model.DTO;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.Size;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class SendMailDTO {
-    private Long sendMailId;
-    private String content;
-    private String mailTo;
-    private Boolean status;
-    private Long createdUser;
-    private Long updatedUser;
-    private Date createdTime;
-    private Date updatedTime;
+    Long sendMailId;
+    String content;
+
+    @Size(max = 500)
+    String mailTo;
+    Boolean status;
+    LocalDateTime createdTime;
+    LocalDateTime updatedTime;
+    Long createdUser;
+    Long updatedUser;
 
 }

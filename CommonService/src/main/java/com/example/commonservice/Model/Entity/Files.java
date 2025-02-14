@@ -2,6 +2,8 @@ package com.example.commonservice.Model.Entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
 
@@ -10,13 +12,12 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "fileId")
-@ToString(of = {"fileId", "fileName", "filePath", "businessCode", "businessId"})
 @Builder
 public class Files {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "files_sequence")
+    @SequenceGenerator(name = "files_sequence", sequenceName = "FILES_SEQ", allocationSize = 1)
     @Column(name = "FILE_ID")
     private Long fileId;
 
@@ -35,14 +36,12 @@ public class Files {
     @Column(name = "STATUS")
     private Boolean status;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATED_TIME")
-    @Setter(AccessLevel.NONE)
+    @CreationTimestamp
     private Date createdTime;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "UPDATED_TIME")
-    @Setter(AccessLevel.NONE)
+    @UpdateTimestamp
     private Date updatedTime;
 
     @Column(name = "CREATED_USER")
@@ -52,16 +51,7 @@ public class Files {
     private Long updatedUser;
 
     //Constructor
-    public Files(
-            Long fileId,
-            String fileName,
-            String filePath,
-            String businessCode,
-            Long businessId,
-            Boolean status,
-            Long createdUser,
-            Long updatedUser
-    ){
+    public Files(Long fileId, String fileName, String filePath, String businessCode, Long businessId, Boolean status, Long createdUser, Long updatedUser) {
         this.fileId = fileId;
         this.fileName = fileName;
         this.filePath = filePath;
@@ -71,17 +61,6 @@ public class Files {
         this.createdUser = createdUser;
         this.updatedUser = updatedUser;
         this.createdTime = new Date();
-        this.updatedTime = new Date();
-    }
-
-    @PrePersist
-    protected void toCreate(){
-        this.createdTime = new Date();
-        this.updatedTime = new Date();
-    }
-
-    @PreUpdate
-    protected void toUpdate(){
         this.updatedTime = new Date();
     }
 }

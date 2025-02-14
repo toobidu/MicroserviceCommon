@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -28,8 +28,8 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
             @Param("departmentName") String departmentName,
             @Param("parentDepartmentId") Long parentDepartmentId,
             @Param("status") Boolean status,
-            @Param("createdTime") Date createdTime,
-            @Param("updatedTime") Date updatedTime,
+            @Param("createdTime") LocalDateTime createdTime,
+            @Param("updatedTime") LocalDateTime updatedTime,
             @Param("createdUser") Long createdUser,
             @Param("updatedUser") Long updatedUser);
 

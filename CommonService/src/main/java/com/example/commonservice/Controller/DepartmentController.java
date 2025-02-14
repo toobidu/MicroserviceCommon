@@ -5,11 +5,10 @@ import com.example.commonservice.Service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,8 +63,8 @@ public class DepartmentController {
             @RequestParam(required = false) String departmentName,
             @RequestParam(required = false) Long parentDepartmentId,
             @RequestParam(required = false) Boolean status,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date createdTime,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date updatedTime,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime createdTime,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime updatedTime,
             @RequestParam(required = false) Long createdUser,
             @RequestParam(required = false) Long updatedUser) {
         List<Department> departments = departmentService.searchDepartments(departmentId, departmentCode, departmentName, parentDepartmentId, status, createdTime, updatedTime, createdUser, updatedUser);

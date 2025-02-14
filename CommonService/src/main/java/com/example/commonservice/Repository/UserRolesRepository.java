@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -21,13 +21,12 @@ public interface UserRolesRepository extends JpaRepository<UserRoles, Long> {
             + "(:updatedTime IS NULL OR ur.updatedTime = :updatedTime) AND "
             + "(:createdUser IS NULL OR ur.createdUser = :createdUser) AND "
             + "(:updatedUser IS NULL OR ur.updatedUser = :updatedUser)")
-
     List<UserRoles> searchUserRolesBy(
             @Param("userRoleId") Long userRoleId,
             @Param("userId") Long userId,
             @Param("roleId") Long roleId,
-            @Param("createdTime") Date createdTime,
-            @Param("updatedTime") Date updatedTime,
+            @Param("createdTime") LocalDateTime createdTime,
+            @Param("updatedTime") LocalDateTime updatedTime,
             @Param("createdUser") Long createdUser,
             @Param("updatedUser") Long updatedUser
 

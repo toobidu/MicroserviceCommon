@@ -8,7 +8,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -89,7 +91,7 @@ public class CategoryServiceImplement implements CategoryService {
 
     // Search categories by multiple criteria
     @Override
-    public List<Category> searchCategories(Long categoryId, String categoryCode, String categoryName, Boolean status, Date createdTime, Date updatedTime, Long createdUser, Long updatedUser) {
+    public List<Category> searchCategories(Long categoryId, String categoryCode, String categoryName, Boolean status, LocalDateTime createdTime, LocalDateTime updatedTime, Long createdUser, Long updatedUser) {
         // Implement the search logic based on the criteria
         return categoryRepository.searchCategoriesBy(categoryId, categoryCode, categoryName, status, createdTime, updatedTime, createdUser, updatedUser);
     }

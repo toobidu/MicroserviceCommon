@@ -8,7 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,7 +50,7 @@ public class ConfigViewServiceImplement implements ConfigViewService {
     @Override
     @Transactional(readOnly = false)
     public Optional<ConfigView> updateConfigView(Long configViewId, ConfigView configView) {
-        try{
+        try {
             return configViewRepository.findById(configViewId)
                     .map(existingConfigView -> {
                         //Update
@@ -64,9 +64,9 @@ public class ConfigViewServiceImplement implements ConfigViewService {
                         return configViewRepository.save(existingConfigView);
 
                     });
-        }catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             throw new RuntimeException("Congfig View code already exists", e);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException("Error creating Config View", e);
         }
     }
@@ -88,7 +88,7 @@ public class ConfigViewServiceImplement implements ConfigViewService {
 
     //Search
     @Override
-    public List<ConfigView> searchConfigView(Long configViewId, String viewName, String viewPath, String apiPath, String roleId, Boolean status, Date createdTime, Date updatedTime, Long createdUser, Long updatedUser) {
+    public List<ConfigView> searchConfigView(Long configViewId, String viewName, String viewPath, String apiPath, String roleId, Boolean status, LocalDateTime createdTime, LocalDateTime updatedTime, Long createdUser, Long updatedUser) {
         return configViewRepository.searchConfigViewsBy(configViewId, viewName, viewPath, apiPath, roleId, status, createdTime, updatedTime, createdUser, updatedUser);
     }
 }

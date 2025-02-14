@@ -1,27 +1,26 @@
 package com.example.commonservice.Model.Entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import java.util.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "DEPARTMENT")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "departmentId")
-@ToString(of = {"departmentId", "departmentCode", "departmentName", "parentDepartmentId"})
 @Builder
 public class Department {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "department_sequence")
-    @SequenceGenerator(
-            name = "department_sequence",
-            sequenceName = "DEPARTMENT_SEQ",
-            allocationSize = 1
-    )
+    @SequenceGenerator(name = "department_sequence", sequenceName = "DEPARTMENT_SEQ", allocationSize = 1)
     @Column(name = "DEPARTMENT_ID")
     private Long departmentId;
 
@@ -37,15 +36,13 @@ public class Department {
     @Column(name = "STATUS")
     private Boolean status;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATED_TIME")
-    @Setter(AccessLevel.NONE)
-    private Date createdTime;
+    @CreationTimestamp
+    private LocalDateTime createdTime;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "UPDATED_TIME")
-    @Setter(AccessLevel.NONE)
-    private Date updatedTime;
+    @UpdateTimestamp
+    private LocalDateTime updatedTime;
 
     @Column(name = "CREATED_USER")
     private Long createdUser;
@@ -55,34 +52,13 @@ public class Department {
 
     //Constructor
 
-    public Department(
-            Long departmentId,
-            String departmentCode,
-            String departmentName,
-            Long parentDepartmentId,
-            Boolean status,
-            Long createdUser,
-            Long updatedUser
-    ) {
+    public Department(Long departmentId, String departmentCode, String departmentName, Long parentDepartmentId, Boolean status, Long createdUser, Long updatedUser) {
         this.departmentId = departmentId;
         this.departmentCode = departmentCode;
         this.departmentName = departmentName;
         this.parentDepartmentId = parentDepartmentId;
         this.status = status;
-        this.createdTime = new Date();
-        this.updatedTime = new Date();
         this.createdUser = createdUser;
         this.updatedUser = updatedUser;
-    }
-
-    @PrePersist
-    protected void toCreate() {
-        this.createdTime = new Date();
-        this.updatedTime = new Date();
-    }
-
-    @PreUpdate
-    protected void toUpdate() {
-        this.updatedTime = new Date();
     }
 }

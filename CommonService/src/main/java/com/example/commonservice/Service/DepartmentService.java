@@ -2,7 +2,7 @@ package com.example.commonservice.Service;
 
 import com.example.commonservice.Model.Entity.Department;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,5 +21,5 @@ public interface DepartmentService {
     boolean deleteDepartment(Long departmentId);
 
     //Search
-    List<Department> searchDepartments(Long departmentId, String departmentCode, String departmentName, Long parentDepartmentId, Boolean status, Date createdTime, Date updatedTime, Long createdUser, Long updatedUser);
+    List<Department> searchDepartments(Long departmentId, String departmentCode, String departmentName, Long parentDepartmentId, Boolean status, LocalDateTime createdTime, LocalDateTime updatedTime, Long createdUser, Long updatedUser);
 }

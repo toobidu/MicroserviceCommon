@@ -1,17 +1,21 @@
 package com.example.commonservice.Model.Entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "USER_ROLES")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "userRoleId")
-@ToString(of = {"userRoleId", "roleName"})
+@Builder
 public class UserRoles {
 
     @Id
@@ -20,22 +24,19 @@ public class UserRoles {
     @Column(name = "ID")
     private Long userRolesId;
 
-    @OneToOne
-    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", insertable = false, updatable = false)
-    private Users users;
+    @Column(name = "USER_ID")
+    private Long userId;
 
     @Column(name = "ROLE_ID")
     private Long roleId;
 
-    @Column(name = "CREATED_TIME")
     @Temporal(TemporalType.TIMESTAMP)
-    @Setter(AccessLevel.NONE)
-    private Date createdTime;
+    @CreationTimestamp
+    private LocalDateTime createdTime;
 
-    @Column(name = "UPDATED_TIME")
     @Temporal(TemporalType.TIMESTAMP)
-    @Setter(AccessLevel.NONE)
-    private Date updatedTime;
+    @UpdateTimestamp
+    private LocalDateTime updatedTime;
 
     @Column(name = "CREATED_USER")
     private Long createdUser;
@@ -50,18 +51,5 @@ public class UserRoles {
         this.roleId = roleId;
         this.createdUser = createdUser;
         this.updatedUser = createdUser;
-        this.createdTime = new Date();
-        this.updatedTime = new Date();
-    }
-
-    @PrePersist
-    protected void toCreate() {
-        this.createdTime = new Date();
-        this.updatedTime = new Date();
-    }
-
-    @PreUpdate
-    protected void toUpdate() {
-        this.updatedTime = new Date();
     }
 }

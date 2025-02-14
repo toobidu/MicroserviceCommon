@@ -8,7 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,7 +57,7 @@ public class DepartmentServiceImplement implements DepartmentService {
     @Override
     @Transactional(readOnly = false)
     public Optional<Department> updateDepartment(Department department, Long departmentId) {
-        try{
+        try {
             return departmentRepository.findById(departmentId)
                     .map(existingDepartment -> {
 
@@ -70,7 +70,7 @@ public class DepartmentServiceImplement implements DepartmentService {
                         existingDepartment.setUpdatedUser(department.getUpdatedUser());
                         return departmentRepository.save(existingDepartment);
                     });
-        }catch (DataIntegrityViolationException e) {
+        } catch (DataIntegrityViolationException e) {
             throw new RuntimeException("Department code already exists", e);
         } catch (Exception e) {
             throw new RuntimeException("Error updating department", e);
@@ -93,7 +93,7 @@ public class DepartmentServiceImplement implements DepartmentService {
     }
 
     @Override
-    public List<Department> searchDepartments(Long departmentId, String departmentCode, String departmentName, Long parentDepartmentId, Boolean status, Date createdTime, Date updatedTime, Long createdUser, Long updatedUser) {
+    public List<Department> searchDepartments(Long departmentId, String departmentCode, String departmentName, Long parentDepartmentId, Boolean status, LocalDateTime createdTime, LocalDateTime updatedTime, Long createdUser, Long updatedUser) {
         return departmentRepository.searchDepartmentsBy(departmentId, departmentCode, departmentName, parentDepartmentId, status, createdTime, updatedTime, createdUser, updatedUser);
     }
 

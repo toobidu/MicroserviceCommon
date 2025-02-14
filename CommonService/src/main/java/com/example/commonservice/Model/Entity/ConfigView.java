@@ -2,8 +2,10 @@ package com.example.commonservice.Model.Entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -11,18 +13,12 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "configViewId")
-@ToString(of = {"configViewId", "viewName", "viewPath", "apiPath", "roleId"})
 @Builder
 public class ConfigView {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "config_view_sequence")
-    @SequenceGenerator(
-            name = "config_view_sequence",
-            sequenceName = "CONFIG_VIEW_SEQ",
-            allocationSize = 1
-    )
+    @SequenceGenerator(name = "config_view_sequence", sequenceName = "CONFIG_VIEW_SEQ", allocationSize = 1)
     @Column(name = "ID")
     private Long configViewId;
 
@@ -41,15 +37,13 @@ public class ConfigView {
     @Column(name = "STATUS")
     private Boolean status;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATED_TIME")
-    @Setter(AccessLevel.NONE)
-    private Date createdTime;
+    @CreationTimestamp
+    private LocalDateTime createdTime;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "UPDATED_TIME")
-    @Setter(AccessLevel.NONE)
-    private Date updatedTime;
+    @UpdateTimestamp
+    private LocalDateTime updatedTime;
 
     @Column(name = "CREATED_USER")
     private Long createdUser;
@@ -58,35 +52,14 @@ public class ConfigView {
     private Long updatedUser;
 
     //Constructor
-    public ConfigView(
-            Long configViewId,
-            String viewName,
-            String viewPath,
-            String apiPath,
-            String roleId,
-            Boolean status,
-            Long createdUser,
-            Long updatedUser) {
+    public ConfigView(Long configViewId, String viewName, String viewPath, String apiPath, String roleId, Boolean status, Long createdUser, Long updatedUser) {
         this.configViewId = configViewId;
         this.viewName = viewName;
         this.viewPath = viewPath;
         this.apiPath = apiPath;
         this.roleId = roleId;
         this.status = status;
-        this.createdTime = new Date();
-        this.updatedTime = new Date();
         this.createdUser = createdUser;
         this.updatedUser = updatedUser;
-    }
-
-    @PrePersist
-    protected void toCreate() {
-        this.createdTime = new Date();
-        this.updatedTime = new Date();
-    }
-
-    @PreUpdate
-    protected void toUpdate() {
-        this.updatedTime = new Date();
     }
 }

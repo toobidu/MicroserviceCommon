@@ -8,7 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -83,7 +83,7 @@ public class UserRolesServiceImplement implements UserRolesService {
     //Search user roles by multiple criteria
 
     @Override
-    public List<UserRoles> searchUserRoles(Long userRolesId, Long userId, Long roleId, Long createdUser, Long updatedUser, Date createdDate, Date updatedDate) {
+    public List<UserRoles> searchUserRoles(Long userRolesId, Long userId, Long roleId, Long createdUser, Long updatedUser, LocalDateTime createdDate, LocalDateTime updatedDate) {
         return userRolesRepository.searchUserRolesBy(userRolesId, userId, roleId, createdDate, updatedDate, createdUser, updatedUser);
     }
 }

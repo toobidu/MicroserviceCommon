@@ -3,13 +3,14 @@ package com.example.commonservice.Repository;
 import com.example.commonservice.Model.Entity.SendMail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface SendMailRepository extends JpaRepository<SendMail, Long>{
+public interface SendMailRepository extends JpaRepository<SendMail, Long> {
 
     //Custom query method for searching send mails by multiple criteria
     @Query("SELECT sm FROM SendMail sm WHERE "
@@ -22,12 +23,12 @@ public interface SendMailRepository extends JpaRepository<SendMail, Long>{
             + "(:createdUser IS NULL OR sm.createdUser = :createdUser) AND "
             + "(:updatedUser IS NULL OR sm.updatedUser = :updatedUser)")
     List<SendMail> searchSendMailsBy(
-            Long sendMailId,
-            String content,
-            String mailTo,
-            Boolean status,
-            Date createdTime,
-            Date updatedTime,
-            Long createdUser,
-            Long updatedUser);
+            @Param("sendMailId") Long sendMailId,
+            @Param("content") String content,
+            @Param("mailTo") String mailTo,
+            @Param("status") Boolean status,
+            @Param("createdTime") LocalDateTime createdTime,
+            @Param("updatedTime") LocalDateTime updatedTime,
+            @Param("createdUser") Long createdUser,
+            @Param("updatedUser") Long updatedUser);
 }

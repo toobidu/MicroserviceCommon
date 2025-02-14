@@ -2,7 +2,7 @@ package com.example.commonservice.Service;
 
 import com.example.commonservice.Model.Entity.Category;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +21,6 @@ public interface CategoryService {
     boolean deleteCategory(Long categoryId);
 
     // Search categories by multiple criteria
-    List<Category> searchCategories(Long categoryId, String categoryCode, String categoryName, Boolean status, Date createdTime, Date updatedTime, Long createdUser, Long updatedUser);
+    List<Category> searchCategories(Long categoryId, String categoryCode, String categoryName, Boolean status, LocalDateTime createdTime, LocalDateTime updatedTime, Long createdUser, Long updatedUser);
 
 }

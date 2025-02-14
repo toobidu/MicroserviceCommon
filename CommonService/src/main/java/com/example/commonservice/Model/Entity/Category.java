@@ -1,27 +1,26 @@
 package com.example.commonservice.Model.Entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import java.util.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "CATEGORY")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "categoryId")
-@ToString(of = {"categoryId", "categoryCode", "categoryName"})
 @Builder
 public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "category_sequence")
-    @SequenceGenerator(
-            name = "category_sequence",
-            sequenceName = "CATEGORY_SEQ",
-            allocationSize = 1
-    )
+    @SequenceGenerator(name = "category_sequence", sequenceName = "CATEGORY_SEQ", allocationSize = 1)
     @Column(name = "CATEGORY_ID")
     private Long categoryId;
 
@@ -34,15 +33,13 @@ public class Category {
     @Column(name = "STATUS")
     private Boolean status;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATED_TIME")
-    @Setter(AccessLevel.NONE)
-    private Date createdTime;
+    @CreationTimestamp
+    private LocalDateTime createdTime;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "UPDATED_TIME")
-    @Setter(AccessLevel.NONE)
-    private Date updatedTime;
+    @UpdateTimestamp
+    private LocalDateTime updatedTime;
 
     @Column(name = "CREATED_USER")
     private Long createdUser;
@@ -51,33 +48,12 @@ public class Category {
     private Long updatedUser;
 
     //Constructor
-    public Category(
-            Long categoryId,
-            String categoryCode,
-            String categoryName,
-            Boolean status,
-            Long createdUser,
-            Long updatedUser
-    ) {
+    public Category(Long categoryId, String categoryCode, String categoryName, Boolean status, Long createdUser, Long updatedUser) {
         this.categoryId = categoryId;
         this.categoryCode = categoryCode;
         this.categoryName = categoryName;
         this.status = status;
         this.createdUser = createdUser;
         this.updatedUser = updatedUser;
-        this.createdTime = new Date();  // Set createdTime to current time
-        this.updatedTime = new Date();  // Set updatedTime to current time
     }
-
-    @PrePersist
-    protected void toCreate() {
-        this.createdTime = new Date();
-        this.updatedTime = new Date();
-    }
-
-    @PreUpdate
-    protected void toUpdate() {
-        this.updatedTime = new Date();
-    }
-
 }
